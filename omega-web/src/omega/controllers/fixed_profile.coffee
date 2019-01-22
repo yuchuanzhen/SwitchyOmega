@@ -1,4 +1,5 @@
-angular.module('omega').controller 'FixedProfileCtrl', ($scope, $modal) ->
+angular.module('omega').controller 'FixedProfileCtrl', ($scope, $modal,
+  trFilter) ->
   $scope.urlSchemes = ['', 'http', 'https', 'ftp']
   $scope.urlSchemeDefault = 'fallbackProxy'
   proxyProperties =
@@ -20,9 +21,29 @@ angular.module('omega').controller 'FixedProfileCtrl', ($scope, $modal) ->
 
   $scope.showAdvanced = false
 
+  $scope.optionsForScheme = {}
+  for scheme in $scope.urlSchemes
+    defaultLabel =
+      if scheme
+        trFilter('options_protocol_useDefault')
+      else
+        trFilter('options_protocol_direct')
+    $scope.optionsForScheme[scheme] = [
+      {label: defaultLabel, value: undefined},
+      {label: 'HTTP', value: 'http'},
+      {label: 'HTTPS', value: 'https'},
+      {label: 'SOCKS4', value: 'socks4'},
+      {label: 'SOCKS5', value: 'socks5'},
+    ]
+
   $scope.proxyEditors = {}
 
-  $scope.authSupported = {"http": true, "https": true}
+  socks5AuthSupported = (browser?.proxy?.register?)
+  $scope.authSupported = {
+    "http": true,
+    "https": true,
+    "socks5": socks5AuthSupported,
+  }
   $scope.isProxyAuthActive = (scheme) ->
     return $scope.profile.auth?[proxyProperties[scheme]]?
   $scope.editProxyAuth = (scheme) ->
@@ -32,10 +53,12 @@ angular.module('omega').controller 'FixedProfileCtrl', ($scope, $modal) ->
     scope.proxy = proxy
     auth = $scope.profile.auth?[prop]
     scope.auth = auth && angular.copy(auth)
+    scope.authSupported = $scope.authSupported[proxy.scheme]
+    scope.protocolDisp = proxy.scheme
     $modal.open(
       templateUrl: 'partials/fixed_auth_edit.html'
       scope: scope
-      size: 'sm'
+      size: if scope.authSupported then 'sm' else 'lg'
     ).result.then (auth) ->
       if not auth?.username
         if $scope.profile.auth

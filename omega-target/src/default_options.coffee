@@ -7,11 +7,23 @@ module.exports = ->
   "-revertProxyChanges": true
   "-confirmDeletion": true
   "-showInspectMenu": true
+  "-addConditionsToBottom": false
+  "-showExternalProfile": true
   "-downloadInterval": 1440
   "+proxy":
     bypassList: [
-      pattern: "<local>"
-      conditionType: "BypassCondition"
+      {
+        pattern: "127.0.0.1"
+        conditionType: "BypassCondition"
+      }
+      {
+        pattern: "::1"
+        conditionType: "BypassCondition"
+      }
+      {
+        pattern: "localhost"
+        conditionType: "BypassCondition"
+      }
     ]
     profileType: "FixedProfile"
     name: "proxy"

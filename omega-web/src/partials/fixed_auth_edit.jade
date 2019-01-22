@@ -5,6 +5,11 @@ form(ng-submit='authForm.$valid && $close(auth)' name='authForm')
       span.sr-only Close
     h4.modal-title {{'options_modalHeader_proxyAuth' | tr}}
   .modal-body(style='padding-bottom: 0;')
+    .form-group(ng-show='!authSupported')
+      .alert.alert-danger
+        span.glyphicon.glyphicon-warning-sign
+        = ' '
+        | {{"options_proxy_authNotSupported" | tr:[protocolDisp]}}
     .form-group
       label.sr-only {{'options_proxyAuthUsername' | tr}}
       div(input-group-clear type='text' model='auth.username' autofocus
@@ -19,7 +24,7 @@ form(ng-submit='authForm.$valid && $close(auth)' name='authForm')
           disabled ng-show='!auth.username')
         span.input-group-btn
           button.btn.btn-default(type='button' ng-click='showPassword = !showPassword'
-            title="{{'showPassword_' + (showPassword ? 'hide' : 'show') | tr}}" ng-disabled='!auth.username')
+            title="{{(showPassword ? 'options_proxyAuthHidePassword' : 'options_proxyAuthShowPassword') | tr}}" ng-disabled='!auth.username')
             span.glyphicon(ng-class='{"glyphicon-eye-close": !showPassword, "glyphicon-eye-open": !!showPassword}')
   .modal-footer
     button.btn.btn-default(type='button' ng-click='$dismiss()') {{'dialog_cancel' | tr}}

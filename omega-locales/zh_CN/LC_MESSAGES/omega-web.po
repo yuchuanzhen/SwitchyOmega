@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: SwitchyOmega 2.3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-13 11:05+0000\n"
-"PO-Revision-Date: 2015-02-15 14:52+0200\n"
-"Last-Translator: FelisCatus <shyc2010@gmail.com>\n"
-"Language-Team: Chinese (China) "
-"<https://hosted.weblate.org/projects/switchyomega/main/zh_CN/>\n"
+"PO-Revision-Date: 2018-07-06 20:27+0000\n"
+"Last-Translator: Felis Catus <shyc2010@gmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"switchyomega/main/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.2-dev\n"
+"X-Generator: Weblate 3.1-dev\n"
 
 msgid "appNameShort"
 msgstr "SwitchyOmega"
@@ -62,6 +62,20 @@ msgstr ""
 "如果域名层数在设定的范围内则匹配，否则不匹配。<br>域名层数是指 <b>域名共有几段（以点分隔）</b>.<br>例如: <code>www."
 "example.com</code> 的域名层数为 3，而 <code>internal</code> 的域名层数为 1."
 
+msgid "condition_IpCondition"
+msgstr "IP 地址字面量"
+
+msgid "condition_help_IpCondition"
+msgstr ""
+"当且仅当主机是<b>字面的</b> IP 地址，且地址处于某个子网内时匹配。"
+"子网使用 <a href='"
+"http://www.ibm.com/support/knowledgecenter/zh/SS2MBL_9.0.2/PCAAdmin/PCA/Cfg/CIDRFormat_47.html'"
+">CIDR 格式</a>表示。<br>例如，规则 <code>127.0.0.1/16</code> 会匹配所有类似 "
+"<code>127.0.*.*</code> 的地址。<br>"
+"因此地址 <code>127.0.0.1</code> 匹配而地址 <code>127.1.0.0</code> 不匹配。"
+"主机名称，例如 <code>localhost</code> 不会被此类规则匹配，因为它们<b>不是</b> "
+"IP 地址字面量。"
+
 msgid "condition_UrlWildcardCondition"
 msgstr "网址通配符"
 
@@ -99,6 +113,35 @@ msgid "condition_help_FalseCondition"
 msgstr ""
 "设置规则类型为<code>(禁用)</code>可以临时禁用某个条件。禁用的条件在匹配时视为不存在。<br>条件被禁用后，仍然保存有之前的数据（"
 "例如通配符或正则），因此当需要时，可以把条件类型改回之前的类型，以方便地重新启用条件。"
+
+msgid "condition_TimeCondition"
+msgstr "当前时间"
+
+msgid "condition_help_TimeCondition"
+msgstr ""
+"如果当前本地时间在某个范围内则匹配。此范围由<b>开始小时</b>和<b>结束小时</b>"
+"确定，包含开始的那个小时以及结束的那个小时。<br>"
+"本地时间、开始小时和结束小时均按照<b>24小时制</b>计算（从<b>0到23</b>）。<br>"
+"此条件大约在请求发出的瞬间，才计算是否匹配。"
+
+msgid "condition_WeekdayCondition"
+msgstr "每周几"
+
+msgid "condition_help_WeekdayCondition"
+msgstr ""
+"只在每周的某几天才匹配。可以在条件详情中勾选<b>星期几有效</b>。"
+"根据当地时区来计算现在是星期几，然后再查看当天是否选中。<br>"
+"假设在请求发送时是星期X：如果星期X被勾选，则匹配所有请求。否则不匹配任何请求。<br>"
+"除了日期以外，在匹配过程中不会参考请求的网址或任何其他信息。"
+
+msgid "condition_alert_fullUrlLimitation"
+msgstr ""
+"Chrome 52 起，<code>https://</code>协议下的完整网址无法正常匹配。"
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/Chromium-%E5%AE%8C%E6%95%B4%E7%BD%91%E5%9D%80%E9%99%90%E5%88%B6'>"
+"更多信息...</a>"
+
+msgid "condition_alert_fullUrlLimitationLink"
+msgstr "https://github.com/FelisCatus/SwitchyOmega/wiki/Chromium-%E5%AE%8C%E6%95%B4%E7%BD%91%E5%9D%80%E9%99%90%E5%88%B6"
 
 msgid "condition_group_default"
 msgstr " "
@@ -157,6 +200,9 @@ msgstr "还原"
 msgid "options_title"
 msgstr "SwitchyOmega 选项"
 
+msgid "options_experimental_badge"
+msgstr "测试版"
+
 msgid "options_navHeader_setting"
 msgstr "设定"
 
@@ -199,6 +245,9 @@ msgstr "当更改情景模式时刷新当前标签。"
 msgid "options_showInspectMenu"
 msgstr "右键菜单中，可检查网页元素所使用的代理。"
 
+msgid "options_addConditionsToBottom"
+msgstr "把以弹出菜单创建的规则添加到列表末尾。"
+
 msgid "options_group_keyboardShortcut"
 msgstr "键盘快捷键"
 
@@ -224,7 +273,7 @@ msgid "options_showConditionTypesAdvanced"
 msgstr "显示高级切换条件"
 
 msgid "options_showConditionTypesAdvancedHelp"
-msgstr "启用后，可以使用一些新种类的切换条件，功能强大但难以掌握。对于大多数情况来说，只用基本条件类型就可以满足需求，因此不推荐启用此功能。"
+msgstr "解锁一些新种类的、功能强大的但难以掌握的切换条件。对于大多数情况来说，基本条件类型应该就足够，因此不推荐该选项。"
 
 msgid "options_quickSwitch"
 msgstr "快速切换"
@@ -246,6 +295,35 @@ msgstr "代理设置变化"
 
 msgid "options_revertProxyChanges"
 msgstr "撤消其他扩展对代理的更改。"
+
+msgid "options_group_conflicts"
+msgstr "冲突"
+
+msgid "options_conflicts_introduction"
+msgstr ""
+"有时其他应用也会试图控制代理设置，从而导致冲突。请注意，去广告等其他扩展也可能"
+"利用了代理设置来实现功能。此类冲突是由浏览器的工作原理引起的，所以无法避免。"
+
+msgid "options_conflicts_lowerPriority"
+msgstr ""
+"如果 SwitchyOmega 图标上显示这样的红色徽章，表示另一个应用优先级较高，因此"
+"SwitchyOmega 无法控制代理设置。请尝试卸载 SwitchyOmega 再重新安装，这样可能可"
+"以提高 SwitchyOmega 的优先级。如果重装后您仍然看到冲突，那么请考虑移除那个"
+"导致冲突的应用。"
+
+msgid "options_conflicts_higherPriority"
+msgstr ""
+"如果 SwitchyOmega 的优先级较高，那么您可以在弹出菜单中选择 $SYSTEMPROFILE$ 来"
+"把控制权还给其他应用或系统设置。"
+
+msgid "options_showExternalProfile"
+msgstr "在弹出菜单中显示菜单项，以导入其他应用提供的代理设置。"
+
+msgid "options_showExternalProfileHelp"
+msgstr ""
+"选择了 $SYSTEMPROFILE$ 的情况下，您可以在弹出菜单中选择 $EXTERNALPROFILE$ 来"
+"导入其他应用提供的代理设置。导入的设置将会成为一个新的情景模式，其名称由您决"
+"定。请注意导入的情景模式只是当时的一个快照，导入后不会随着原来的应用更新。"
 
 msgid "options_group_networkRequests"
 msgstr "网络请求"
@@ -421,6 +499,10 @@ msgstr "代理端口"
 msgid "options_proxy_auth"
 msgstr "代理登录"
 
+msgid "options_proxy_authNotSupported"
+msgstr "您的浏览器不支持 $PROTOCOLDISP$ 代理认证！如有问题请联系您的浏览器支持，"
+"请勿反馈此问题给 SwitchyOmega."
+
 msgid "options_proxy_authAllWarningPac"
 msgstr "警告: 用户名密码将会提供给PAC脚本返回的任何服务器，有时目标服务器会出乎您的预料。"
 
@@ -555,6 +637,9 @@ msgstr "添加条件"
 msgid "options_cloneRule"
 msgstr "克隆"
 
+msgid "options_ruleNote"
+msgstr "备注"
+
 msgid "options_switchAttachedProfileInCondition"
 msgstr "规则列表规则"
 
@@ -569,6 +654,30 @@ msgstr "默认情景模式"
 
 msgid "options_hostLevelsBetween"
 msgstr "≤ 主机层数 ≤"
+
+msgid "options_hourBetween"
+msgstr "≤ 当前小时 ≤"
+
+msgid "options_weekDayShort_0"
+msgstr "日"
+
+msgid "options_weekDayShort_1"
+msgstr "一"
+
+msgid "options_weekDayShort_2"
+msgstr "二"
+
+msgid "options_weekDayShort_3"
+msgstr "三"
+
+msgid "options_weekDayShort_4"
+msgstr "四"
+
+msgid "options_weekDayShort_5"
+msgstr "五"
+
+msgid "options_weekDayShort_6"
+msgstr "六"
 
 msgid "options_group_conditionHelp"
 msgstr "条件类型说明"
@@ -683,6 +792,12 @@ msgstr "用户名"
 msgid "options_proxyAuthPassword"
 msgstr "密码"
 
+msgid "options_proxyAuthShowPassword"
+msgstr "显示密码"
+
+msgid "options_proxyAuthHidePassword"
+msgstr "隐藏密码"
+
 msgid "options_proxyAuthNone"
 msgstr "(无密码)"
 
@@ -793,6 +908,21 @@ msgstr "情景模式已经更新成功。"
 
 msgid "options_profileDownloadError"
 msgstr "下载情景模式数据时出错！"
+
+msgid "options_profileDownloadError_NetworkError"
+msgstr "更新时发生网络错误。"
+
+msgid "options_profileDownloadError_HttpError"
+msgstr "更新时发生网络错误 (HTTP $STATUS$)."
+
+msgid "options_profileDownloadError_HttpNotFoundError"
+msgstr "在远程服务器上找不到情景模式网址对应的文件。请检查网址。"
+
+msgid "options_profileDownloadError_HttpServerError"
+msgstr "更新时远程服务器发生错误 ($STATUS$)。"
+
+msgid "options_profileDownloadError_ContentTypeRejectedError"
+msgstr "下载的数据不符合格式！建议您在浏览器中打开情景模式网址并检查其内容。"
 
 msgid "options_downloadProfileNow"
 msgstr "立即更新情景模式"
@@ -905,6 +1035,9 @@ msgstr "设置网络检测选项"
 msgid "options_resultProfileForSelectedDomains"
 msgstr "对所有选中域名使用此情景模式："
 
+msgid "options_pac_profile_unsupported_moz"
+msgstr "由于技术限制，PAC 情景模式无法在 Mozilla Firefox 上工作！"
+
 msgid "popup_issueTemplate"
 msgstr ""
 "\n"
@@ -978,3 +1111,35 @@ msgstr "检查此[元素]使用的代理"
 
 msgid "contextMenu_enableQuickSwitch"
 msgstr "启用快速切换"
+
+msgid "about_title"
+msgstr "关于"
+
+msgid "about_app_description"
+msgstr "一个代理设置工具"
+
+msgid "about_version"
+msgstr "版本 $VERSION$"
+
+msgid "about_experimental_warning_moz"
+msgstr "Mozilla Firefox 浏览器支持目前仍处于早期实验阶段！如果您遇到任何问题，请使用下方的按钮进行反馈。"
+
+msgid "about_disclaimer_networkService"
+msgstr "SwitchyOmega 不提供代理服务器、VPN等网络服务。"
+
+msgid "about_disclaimer_privacy"
+msgstr "SwitchyOmega 不会跟踪您的上网记录，不在页面中插入广告。请参见我们的"
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/Privacy#%E4%B8%AD%E6%96%87'>隐私政策</a>。"
+
+msgid "about_help"
+msgstr "如有其他问题或者需要帮助，请参考"
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98'>常见问题</a>。"
+
+msgid "about_copyright"
+msgstr "版权所有 2012-2017 <a href='https://github.com/FelisCatus/SwitchyOmega/blob/master/AUTHORS'>The SwitchyOmega Authors</a>. 保留所有权利。"
+
+msgid "about_credits"
+msgstr "SwitchyOmega 的诞生离不开 <a href='https://github.com/FelisCatus/SwitchyOmega'>SwitchyOmega</a> 开源项目和其他<a href='https://github.com/FelisCatus/SwitchyOmega/blob/master/AUTHORS'>开源软件</a>。"
+
+msgid "about_license"
+msgstr "SwitchyOmega 是<a href='https://www.gnu.org/philosophy/free-sw.zh-cn.html'>自由软件</a>，使用<a href='https://www.gnu.org/licenses/gpl.html'>GNU General Public License</a> 版本 3 及以上授权。"

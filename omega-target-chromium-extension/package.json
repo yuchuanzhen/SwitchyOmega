@@ -7,6 +7,7 @@
     "chai": "~1.9.1",
     "coffee-script": "^1.7.1",
     "coffeeify": "^0.7.0",
+    "coffeelint": "^1.16.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.0.0",
     "grunt-coffeelint": "^0.0.13",
@@ -23,12 +24,13 @@
     "heap": "^0.2.6",
     "omega-target": "../omega-target",
     "omega-web": "../omega-web",
+    "omega-pac": "../omega-pac",
     "xhr": "^1.16.0"
   },
   "browser": {
     "omega-target": "./omega_target_shim.js"
   },
   "scripts": {
-    "dev": "npm link omega-target && npm link omega-web"
+    "dev": "npm link omega-target && npm link omega-web && npm link omega-pac"
   }
 }

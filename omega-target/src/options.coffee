@@ -54,7 +54,7 @@ class Options
         value = profile
     return value
 
-  constructor: (options, @_storage, @_state, @log, @sync) ->
+  constructor: (options, @_storage, @_state, @log, @sync, @proxyImpl) ->
     @_options = {}
     @_tempProfileRules = {}
     @_tempProfileRulesByProfile = {}
@@ -123,16 +123,19 @@ class Options
             'web.switchGuide': 'showOnFirstUse'
           }).then (items) => @_state.set(items)
           return null unless @sync?
-          # Try to fetch options from sync storage.
-          return @sync.storage.get(null).then (options) =>
-            if not options['schemaVersion']
-              @_state.set({'syncOptions': 'pristine'})
-              return null
-            else
-              @_state.set({'syncOptions': 'sync'})
-              @sync.enabled = true
-              @log.log('Options#loadOptions::fromSync', options)
-              options
+          @_state.get({'syncOptions': ''}).then ({syncOptions}) =>
+            return if syncOptions == 'conflict'
+            # Try to fetch options from sync storage.
+            return @sync.storage.get(null).then((options) =>
+              if not options['schemaVersion']
+                @_state.set({'syncOptions': 'pristine'})
+                return null
+              else
+                @_state.set({'syncOptions': 'sync'})
+                @sync.enabled = true
+                @log.log('Options#loadOptions::fromSync', options)
+                options
+            ).catch(-> null)
         else
           @log.error(e.stack)
           # Some serious error happened when loading options. Disable syncing
@@ -245,7 +248,7 @@ class Options
         try
           Buffer = require('buffer').Buffer
           options = new Buffer(options, 'base64').toString('utf8')
-        catch
+        catch _
           options = null
       options = try JSON.parse(options)
     if not options
@@ -260,7 +263,7 @@ class Options
   ###
   reset: (options) ->
     @log.method('Options#reset', this, arguments)
-    options ?= getDefaultOptions()
+    options ?= @getDefaultOptions()
     @upgrade(@parseOptions(options)).then ([opt]) =>
       # Disable syncing when resetting to avoid affecting sync storage.
       @sync.enabled = false if @sync?
@@ -365,7 +368,16 @@ class Options
       if refresh?
         @_state.set({'refreshOnProfileChange': refresh})
 
-      if changes['-enableQuickSwitch']? or changes['-quickSwitchProfiles']?
+      if Object::hasOwnProperty.call changes, '-showExternalProfile'
+        showExternal = changes['-showExternalProfile']
+        if not showExternal?
+          showExternal = true
+          @_setOptions({'-showExternalProfile': true}, {persist: true})
+        @_state.set({'showExternalProfile': showExternal})
+
+      quickSwitchProfiles = changes['-quickSwitchProfiles']
+      quickSwitchProfiles = @_cleanUpQuickSwitchProfiles(quickSwitchProfiles)
+      if changes['-enableQuickSwitch']? or quickSwitchProfiles?
         @reloadQuickSwitch()
       if changes['-downloadInterval']?
         @schedule 'updateProfile', @_options['-downloadInterval'], =>
@@ -385,6 +397,21 @@ class Options
 
     handler()
     @_storage.watch null, handler
+
+  _cleanUpQuickSwitchProfiles: (quickSwitchProfiles) ->
+    return unless quickSwitchProfiles?
+    seenQuickSwitchProfile = {}
+    validQuickSwitchProfiles = quickSwitchProfiles.filter (name) =>
+      return false if not name
+      key = OmegaPac.Profiles.nameAsKey(name)
+      return false if seenQuickSwitchProfile[key]
+      return false if not OmegaPac.Profiles.byName(name, @_options)
+      seenQuickSwitchProfile[key] = true
+      return true
+    if validQuickSwitchProfiles.length != quickSwitchProfiles.length
+      @_setOptions(
+        {'-quickSwitchProfiles': validQuickSwitchProfiles}, {persist: true})
+    return validQuickSwitchProfiles
 
   ###*
   # Reload the quick switch according to settings.
@@ -540,9 +567,10 @@ class Options
 
       @_watchingProfiles = OmegaPac.Profiles.allReferenceSet(@_tempProfile,
         @_options, profileNotFound: @_profileNotFound.bind(this))
-      applyProxy = @applyProfileProxy(@_tempProfile, profile)
+
+      applyProxy = @proxyImpl.applyProfile(@_tempProfile, profile, @_options)
     else
-      applyProxy = @applyProfileProxy(profile)
+      applyProxy = @proxyImpl.applyProfile(profile, profile, @_options)
 
     return applyProxy if options? and options.update == false
 
@@ -571,16 +599,6 @@ class Options
   # @returns {boolean} True if system mode is activated
   ###
   isSystem: -> @_isSystem
-
-  ###*
-  # Set proxy settings based on the given profile.
-  # In base class, this method is not implemented and will always reject.
-  # @param {{}} profile The profile to apply
-  # @param {{}=profile} meta The metadata of the profile, like name and revision
-  # @returns {Promise} A promise which is fulfilled when the proxy is set.
-  ###
-  applyProfileProxy: (profile, meta) ->
-    Promise.reject new Error('not implemented')
 
   ###*
   # Called when current profile has changed.
@@ -642,7 +660,9 @@ class Options
           return unless profile.name == name
       url = OmegaPac.Profiles.updateUrl(profile)
       if url
-        results[key] = @fetchUrl(url, opt_bypass_cache).then((data) =>
+        type_hints = OmegaPac.Profiles.updateContentTypeHints(profile)
+        fetchResult = @fetchUrl(url, opt_bypass_cache, type_hints)
+        results[key] = fetchResult.then((data) =>
           # Errors and unsuccessful response codes shoud have been already
           # rejected by fetchUrl and will not end up here.
           # So empty data indicates success without any update (e.g. 304).
@@ -666,9 +686,10 @@ class Options
   # In base class, this method is not implemented and will always reject.
   # @param {string} url The name of the profiles,
   # @param {?bool} opt_bypass_cache Do not read from the cache if true
+  # @param {?string} opt_type_hints MIME type hints for downloaded content.
   # @returns {Promise<String>} The text content fetched from the url
   ###
-  fetchUrl: (url, opt_bypass_cache) ->
+  fetchUrl: (url, opt_bypass_cache, opt_type_hints) ->
     Promise.reject new Error('not implemented')
 
   _replaceRefChanges: (fromName, toName, changes) ->
@@ -683,10 +704,13 @@ class Options
     if @_options['-startupProfileName'] == fromName
       changes['-startupProfileName'] = toName
     quickSwitch = @_options['-quickSwitchProfiles']
-    for i in [0...quickSwitch.length]
-      if quickSwitch[i] == fromName
-        quickSwitch[i] = toName
-        changes['-quickSwitchProfiles'] = quickSwitch
+    # Change fromName to toName in Quick Switch, but only if it does not contain
+    # toName already. Otherwise it may cause duplicates.
+    if quickSwitch.indexOf(toName) < 0
+      for i in [0...quickSwitch.length]
+        if quickSwitch[i] == fromName
+          quickSwitch[i] = toName
+          changes['-quickSwitchProfiles'] = quickSwitch
 
     return changes
 
@@ -840,11 +864,17 @@ class Options
           profile.rules.splice(i, 1)
           break
 
-      # Add the new rule to the start so that it won't be shadowed by others.
-      profile.rules.unshift({
-        condition: cond
-        profileName: profileName
-      })
+
+      if @_options['-addConditionsToBottom']
+        profile.rules.push({
+          condition: cond
+          profileName: profileName
+        })
+      else
+        profile.rules.unshift({
+          condition: cond
+          profileName: profileName
+        })
 
     OmegaPac.Profiles.updateRevision(profile)
     changes = {}

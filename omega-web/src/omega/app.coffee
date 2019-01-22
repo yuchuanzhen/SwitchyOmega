@@ -32,16 +32,18 @@ angular.module('omega').constant 'isProfileNameReserved', (name) ->
 angular.module('omega').config ($stateProvider, $urlRouterProvider,
   $httpProvider, $animateProvider, $compileProvider) ->
   $compileProvider.aHrefSanitizationWhitelist(
-    /^\s*(https?|ftp|mailto|chrome-extension):/)
+    /^\s*(https?|ftp|mailto|chrome-extension|moz-extension):/)
+  $compileProvider.imgSrcSanitizationWhitelist(
+    /^\s*(https?|local|data|chrome-extension|moz-extension):/)
   $animateProvider.classNameFilter(/angular-animate/)
 
-  $urlRouterProvider.otherwise '/ui'
+  $urlRouterProvider.otherwise '/about'
   
   $urlRouterProvider.otherwise ($injector, $location) ->
     if $location.path() == ''
-      $injector.get('omegaTarget').lastUrl() || '/ui'
+      $injector.get('omegaTarget').lastUrl() || '/about'
     else
-      '/ui'
+      '/about'
   
   $stateProvider
     .state('ui',
@@ -63,4 +65,45 @@ angular.module('omega').config ($stateProvider, $urlRouterProvider,
     ).state('about',
       url: '/about'
       templateUrl: 'partials/about.html'
+      controller: 'AboutCtrl'
     )
+
+angular.module('omega').factory '$exceptionHandler', ($log) ->
+  return (exception, cause) ->
+    return if exception.message == 'transition aborted'
+    return if exception.message == 'transition superseded'
+    return if exception.message == 'transition prevented'
+    return if exception.message == 'transition failed'
+    $log.error(exception, cause)
+
+angular.module('omega').factory 'omegaDebug', ($window, $rootScope,
+  $injector) ->
+  omegaDebug = $window.OmegaDebug ? {}
+
+  omegaDebug.downloadLog ?= ->
+    downloadFile = $injector.get('downloadFile') ? saveAs
+    blob = new Blob [localStorage['log']], {type: "text/plain;charset=utf-8"}
+    downloadFile(blob, "OmegaLog_#{Date.now()}.txt")
+
+  omegaDebug.reportIssue ?= ->
+    $window.open(
+      'https://github.com/FelisCatus/SwitchyOmega/issues/new?title=&body=')
+    return
+
+  omegaDebug.resetOptions ?= ->
+    $rootScope.resetOptions()
+
+  omegaDebug
+
+angular.module('omega').factory 'downloadFile', ->
+  if browser?.downloads?.download?
+    return (blob, filename) ->
+      url = URL.createObjectURL(blob)
+      if filename
+        browser.downloads.download({url: url, filename: filename})
+      else
+        browser.downloads.download({url: url})
+  else
+    return (blob, filename) ->
+      noAutoBom = true
+      saveAs(blob, filename, noAutoBom)

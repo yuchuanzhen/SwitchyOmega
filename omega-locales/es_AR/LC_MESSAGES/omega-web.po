@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: SwitchyOmega 2.3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-13 10:29+0000\n"
-"PO-Revision-Date: 2015-03-02 14:15+0200\n"
-"Last-Translator: Kleiver Fonseca <thekliver@gmail.com>\n"
-"Language-Team: Argentinean Spanish "
-"<https://hosted.weblate.org/projects/switchyomega/main/es_AR/>\n"
+"PO-Revision-Date: 2018-11-14 05:08+0000\n"
+"Last-Translator: Rodrigo Bernardi <rodrigobernardi@outlook.com.ar>\n"
+"Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/"
+"switchyomega/main/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 2.3-dev\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.3-dev\n"
 
 msgid "appNameShort"
 msgstr "SwitchyOmega"
@@ -21,7 +21,7 @@ msgid "manifest_app_name"
 msgstr "Proxy SwitchyOmega"
 
 msgid "manifest_app_description"
-msgstr "Administra e intercambia entre múltiples proxys rápido y fácil."
+msgstr "Administra e intercambia entre múltiples proxys rápida y fácilmente."
 
 msgid "manifest_icon_default_title"
 msgstr "Cargando…"
@@ -36,7 +36,7 @@ msgid "profile_system"
 msgstr "[Proxy del sistema]"
 
 msgid "condition_HostWildcardCondition"
-msgstr "Comodín de host"
+msgstr "Host comodín"
 
 msgid "condition_help_HostWildcardCondition"
 msgstr ""
@@ -58,21 +58,36 @@ msgstr ""
 "dominio) por <a href='https://www.google.com/search?q=expresión%20regular'>"
 "expresión regular</a>.<br>Las expresiones regulares pueden ser difíciles de "
 "construir (y leer).<br>Es recomendado usar comodines para la mayoría de los "
-"casos y solo usar expresiones regulares para las condiciones que no ses "
+"casos y solo usar expresiones regulares para las condiciones que no se "
 "pueden expresar por ningún otro tipo de condición."
 
 msgid "condition_HostLevelsCondition"
-msgstr "Host levels"
+msgstr "Niveles de Host"
 
 msgid "condition_help_HostLevelsCondition"
 msgstr ""
-"Matches the request if and only if the host level in within the given range."
-"<br>Host level is defined as the <b>number of dot-separated segments</b> of "
-"the host (domain name).<br>Example: <code>www.example.com</code> is with a "
-"host level of 3, while <code>internal</code> is of host level 1."
+"Encuentra una coincidencia si y sólo si el nivel del host está dentro del "
+"rango.<br>El nivel de host se define como el <b>número de porciones "
+"separadas por puntos</b> en el nombre de dominio del host. <br>Ejemplo: "
+"<code>www.ejemplo.com</code> tiene un nivel 3 de host, mientras que "
+"<code>interno</code> es un host de nivel 1."
+
+msgid "condition_IpCondition"
+msgstr "IP Literals"
+
+msgid "condition_help_IpCondition"
+msgstr ""
+"Matches the request if and only if the host is a <b>literal</b> IP address and"
+" in the subnet as specified by <a href='"
+"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation'>"
+"CIDR notation</a>.<br>For example, given the rule <code>127.0.0.1/16</code>, "
+"it matches all IP addresses like <code>127.0.*.*</code>.<br>"
+"So <code>127.0.0.1</code> matches while <code>127.1.0.0</code> does not. "
+"Host names like <code>localhost</code> will never match because they are "
+"<b>not</b> IP literals."
 
 msgid "condition_UrlWildcardCondition"
-msgstr "URL wildcard"
+msgstr "Comodín de URL"
 
 msgid "condition_help_UrlWildcardCondition"
 msgstr ""
@@ -83,7 +98,7 @@ msgstr ""
 "match http://example.com/."
 
 msgid "condition_UrlRegexCondition"
-msgstr "URL regex"
+msgstr "Expresión regular de URL"
 
 msgid "condition_help_UrlRegexCondition"
 msgstr ""
@@ -94,7 +109,7 @@ msgstr ""
 "achieved by any other condition type."
 
 msgid "condition_KeywordCondition"
-msgstr "Keyword"
+msgstr "Palabra clave"
 
 msgid "condition_help_KeywordCondition"
 msgstr ""
@@ -105,10 +120,10 @@ msgstr ""
 "blocking some keywords in the URL, by requesting such URLs through a proxy."
 
 msgid "condition_FalseCondition"
-msgstr "(Disabled)"
+msgstr "(Deshabilitado)"
 
 msgid "condition_details_FalseCondition"
-msgstr "(Condition ignored when matching)"
+msgstr "(Condición ignorada cuando se haya coincidencia)"
 
 msgid "condition_help_FalseCondition"
 msgstr ""
@@ -117,6 +132,37 @@ msgstr ""
 "used to disable conditions temporarily.<br>Disabled conditions still hold "
 "the previous information (like patterns) and can be re-enabled by setting "
 "the condition type back to the previous type."
+
+msgid "condition_TimeCondition"
+msgstr "Tiempo Actual"
+
+msgid "condition_help_TimeCondition"
+msgstr ""
+"Matches if the current local time is in the range defined by "
+"<b>starting hour</b> and <b>ending hour</b>, both inclusive.<br>"
+"Local time, starting hour and ending hour are all calculated in "
+"<b>24-hour</b> format (from <b>0 to 23</b>). <br>"
+"The calculation happens roughly at the moment when the request is sent."
+
+msgid "condition_WeekdayCondition"
+msgstr "Day of the Week"
+
+msgid "condition_help_WeekdayCondition"
+msgstr ""
+"Matches if the <b>current day of week</b> is selected in condition details. "
+"Day is calculated according to local timezone.<br>"
+"The request and its URL don't matter to this condition. "
+"The result is solely based on the day of the week when the request is sent."
+
+msgid "condition_alert_fullUrlLimitation"
+msgstr ""
+"Full URL matching is no longer possible for <code>https://</code> "
+"URLs as of Chrome 52. "
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/Chromium-Full-URL-Limitation'>"
+"Learn more...</a>"
+
+msgid "condition_alert_fullUrlLimitationLink"
+msgstr "https://github.com/FelisCatus/SwitchyOmega/wiki/Chromium-Full-URL-Limitation"
 
 msgid "condition_group_default"
 msgstr " "
@@ -128,22 +174,22 @@ msgid "condition_group_url"
 msgstr "Url"
 
 msgid "condition_group_special"
-msgstr "Special"
+msgstr "Especial"
 
 msgid "ruleListFormat_Switchy"
 msgstr "Switchy"
 
 msgid "ruleListFormat_AutoProxy"
-msgstr "AutoProxy"
+msgstr "Proxy Automático"
 
 msgid "ruleList_usageUrl"
 msgstr "https://github.com/FelisCatus/SwitchyOmega/wiki/RuleListUsage"
 
 msgid "ruleList_error_resultNotEnabled"
-msgstr "Missing '@with result' directive!"
+msgstr "¡Falta la directiva '@with result'!"
 
 msgid "ruleList_error_unknownProfile"
-msgstr "Unknown profile: $PROFILE$"
+msgstr "Perfil desconocido: $PROFILE$"
 
 msgid "ruleList_error_missingResultProfile"
 msgstr "Missing result profile name at Line $LNO$: $SOURCE$"
@@ -155,34 +201,37 @@ msgid "ruleList_error_noDefaultRule"
 msgstr "Missing default rule with catch-all '*' condition!"
 
 msgid "dialog_close"
-msgstr "Close"
+msgstr "Cerrar"
 
 msgid "dialog_save"
-msgstr "Save changes"
+msgstr "Guardar cambios"
 
 msgid "dialog_ok"
 msgstr "OK"
 
 msgid "dialog_cancel"
-msgstr "Cancel"
+msgstr "Cancelar"
 
 msgid "inputClear_clear"
-msgstr "Clear"
+msgstr "Borrar"
 
 msgid "inputClear_restore"
-msgstr "Restore"
+msgstr "Restaurar"
 
 msgid "options_title"
-msgstr "SwitchyOmega Options"
+msgstr "Opciones SwitchyOmega"
+
+msgid "options_experimental_badge"
+msgstr "α"
 
 msgid "options_navHeader_setting"
-msgstr "Settings"
+msgstr "Configuraciones"
 
 msgid "options_navHeader_profiles"
-msgstr "Profiles"
+msgstr "Perfiles"
 
 msgid "options_navHeader_actions"
-msgstr "Actions"
+msgstr "Acciones"
 
 msgid "options_tab_ui"
 msgstr "Interface"
@@ -191,22 +240,22 @@ msgid "options_tab_general"
 msgstr "General"
 
 msgid "options_tab_importExport"
-msgstr "Import/Export"
+msgstr "Importar/Exportar"
 
 msgid "options_newProfile"
-msgstr "New profile…"
+msgstr "Nuevo perfil…"
 
 msgid "options_apply"
-msgstr "Apply changes"
+msgstr "Aplicar cambios"
 
 msgid "options_discard"
-msgstr "Discard changes"
+msgstr "Descartar cambios"
 
 msgid "options_reset"
-msgstr "Reset options"
+msgstr "Reiniciar las opciones"
 
 msgid "options_group_miscOptions"
-msgstr "Misc Options"
+msgstr "Opciones misceláneas"
 
 msgid "options_confirmDeletion"
 msgstr "Confirm on condition deletion."
@@ -216,6 +265,9 @@ msgstr "Refresh current tab on profile change."
 
 msgid "options_showInspectMenu"
 msgstr "Allow inspecting proxy used for page elements via context menu."
+
+msgid "options_addConditionsToBottom"
+msgstr "Put new conditions added using the popup to the bottom of the list."
 
 msgid "options_group_keyboardShortcut"
 msgstr "Keyboard Shortcut"
@@ -247,9 +299,9 @@ msgstr "Show advanced condition types"
 
 msgid "options_showConditionTypesAdvancedHelp"
 msgstr ""
-"Unlocks new types of advanced but complicated switch conditions. For most "
-"senarios, the basic condition types should be enough, so this option is not "
-"recommended."
+"Desbloquea nuevos tipos complicados pero avanzados de condiciones 'switch'. "
+"Para la mayoría de los casos, los tipos básicos de condición deberían ser "
+"suficientes; así que no se recomienda usar esta opción."
 
 msgid "options_quickSwitch"
 msgstr "Quick Switch"
@@ -275,6 +327,40 @@ msgstr "Proxy Changes"
 
 msgid "options_revertProxyChanges"
 msgstr "Revert proxy changes done by other apps."
+
+msgid "options_group_conflicts"
+msgstr "Conflicts"
+
+msgid "options_conflicts_introduction"
+msgstr ""
+"Sometimes, other apps will also try to control the proxy settings, resulting "
+"in conflicts. Note that ad blockers and other extensions may also use proxy "
+"settings under the hood. Such conflicts cannot be avoided due to how the "
+"browser works."
+
+msgid "options_conflicts_lowerPriority"
+msgstr ""
+"A red badge like this on the SwitchyOmega icon indicates that another app has "
+"higher priority so SwitchyOmega cannot control the settings. Please try to "
+"uninstall SwitchyOmega and reinstall, which should raise SwitchyOmega's "
+"priority. If you still see conflicts after reinstallation, please consider "
+"removing the other app causing the conflict."
+
+msgid "options_conflicts_higherPriority"
+msgstr ""
+"If SwitchyOmega has higher priority, you can give the control back to other "
+"apps or system settings by selecting $SYSTEMPROFILE$ in the popup menu."
+
+msgid "options_showExternalProfile"
+msgstr "Show popup menu item to import proxy settings from other apps."
+
+msgid "options_showExternalProfileHelp"
+msgstr ""
+"When $SYSTEMPROFILE$ is selected, you can import the effective proxy settings "
+"from other apps by selecting $EXTERNALPROFILE$ on the popup menu. "
+"The settings will be imported as a profile using the name you provide. "
+"Please note that the imported profile is a snapshot and will not reflect "
+"any changes from the source app thereafter."
 
 msgid "options_group_networkRequests"
 msgstr "Network Requests"
@@ -472,6 +558,11 @@ msgstr "Port"
 msgid "options_proxy_auth"
 msgstr "Authentication"
 
+msgid "options_proxy_authNotSupported"
+msgstr "Your browser DOES NOT support $PROTOCOLDISP$ proxy authentication! "
+"Please do not report this issue to SwitchyOmega. Contact the support for "
+"your browser instead."
+
 msgid "options_proxy_authAllWarningPac"
 msgstr ""
 "Warning: The username/password may be sent to unexpected servers returned by "
@@ -634,6 +725,9 @@ msgstr "Add condition"
 msgid "options_cloneRule"
 msgstr "Clone"
 
+msgid "options_ruleNote"
+msgstr "Note"
+
 msgid "options_switchAttachedProfileInCondition"
 msgstr "Rule list rules"
 
@@ -648,6 +742,30 @@ msgstr "Default"
 
 msgid "options_hostLevelsBetween"
 msgstr "≤ host levels ≤"
+
+msgid "options_hourBetween"
+msgstr "≤ current hour ≤"
+
+msgid "options_weekDayShort_0"
+msgstr "Su"
+
+msgid "options_weekDayShort_1"
+msgstr "Mo"
+
+msgid "options_weekDayShort_2"
+msgstr "Tu"
+
+msgid "options_weekDayShort_3"
+msgstr "We"
+
+msgid "options_weekDayShort_4"
+msgstr "Th"
+
+msgid "options_weekDayShort_5"
+msgstr "Fr"
+
+msgid "options_weekDayShort_6"
+msgstr "Sa"
 
 msgid "options_group_conditionHelp"
 msgstr "About Condition Types"
@@ -776,6 +894,12 @@ msgstr "Username"
 msgid "options_proxyAuthPassword"
 msgstr "Password"
 
+msgid "options_proxyAuthShowPassword"
+msgstr "Show password"
+
+msgid "options_proxyAuthHidePassword"
+msgstr "Hide password"
+
 msgid "options_proxyAuthNone"
 msgstr "No Authentication"
 
@@ -901,6 +1025,22 @@ msgstr "Successfully updated profile."
 
 msgid "options_profileDownloadError"
 msgstr "Error downloading profile data!"
+
+msgid "options_profileDownloadError_NetworkError"
+msgstr "A network error occurred when updating."
+
+msgid "options_profileDownloadError_HttpError"
+msgstr "An HTTP error ($STATUS$) occurred when updating."
+
+msgid "options_profileDownloadError_HttpNotFoundError"
+msgstr "The Profile URL was not found on the server. Please double-check."
+
+msgid "options_profileDownloadError_HttpServerError"
+msgstr "The remote server responded with error ($STATUS$) when updating."
+
+msgid "options_profileDownloadError_ContentTypeRejectedError"
+msgstr "The downloaded data is invalid! "
+"You may open the Profile URL in your browser to inspect it."
 
 msgid "options_downloadProfileNow"
 msgstr "Download Profile Now"
@@ -1046,6 +1186,9 @@ msgstr "Configure Network Monitor"
 msgid "options_resultProfileForSelectedDomains"
 msgstr "Use this profile for all selected domains"
 
+msgid "options_pac_profile_unsupported_moz"
+msgstr "PAC Profiles WILL NOT work in Mozilla Firefox due to technical limitations!"
+
 msgid "popup_issueTemplate"
 msgstr ""
 "\n"
@@ -1120,3 +1263,35 @@ msgstr "Inspeccionar proxy utilizado para este Elemento."
 
 msgid "contextMenu_enableQuickSwitch"
 msgstr "Enable Quick Switch"
+
+msgid "about_title"
+msgstr "About"
+
+msgid "about_app_description"
+msgstr "A proxy configuration tool"
+
+msgid "about_version"
+msgstr "Version $VERSION$"
+
+msgid "about_experimental_warning_moz"
+msgstr "Mozilla Firefox support is highly experimental! If you encounter issues, please report using the buttons below."
+
+msgid "about_disclaimer_networkService"
+msgstr "SwitchyOmega does not provide proxies, VPNs, or other network services."
+
+msgid "about_disclaimer_privacy"
+msgstr "SwitchyOmega does not track you or insert ads into webpages. Please see"
+" our <a href='https://github.com/FelisCatus/SwitchyOmega/wiki/Privacy#english'>privacy policy</a>."
+
+msgid "about_help"
+msgstr "Other questions? Need help with using SwitchyOmega? Please see our "
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/FAQ'>FAQ</a>."
+
+msgid "about_copyright"
+msgstr "Copyright 2012-2017 <a href='https://github.com/FelisCatus/SwitchyOmega/blob/master/AUTHORS'>The SwitchyOmega Authors</a>. All rights reserved."
+
+msgid "about_credits"
+msgstr "SwitchyOmega is made possible by the <a href='https://github.com/FelisCatus/SwitchyOmega'>SwitchyOmega</a> open source project and other <a href='https://github.com/FelisCatus/SwitchyOmega/blob/master/AUTHORS'>open source software</a>."
+
+msgid "about_license"
+msgstr "SwitchyOmega is <a href='https://www.gnu.org/philosophy/free-sw.en.html'>free software</a> licensed under <a href='https://www.gnu.org/licenses/gpl.html'>GNU General Public License</a> Version 3 or later."

@@ -17,9 +17,12 @@ module.exports =
   copy_overlay:
     files: ['overlay/**/*']
     tasks: ['copy:overlay']
-  src:
-    files: ['src/**/*.coffee']
-    tasks: ['coffeelint:src', 'browserify', 'copy:target_self']
+  copy_target_popup:
+    files: ['src/js/omega_target_popup.js']
+    tasks: ['copy:target_popup']
   coffee:
-    files: ['src/**/*.coffee', '*.coffee']
-    tasks: ['coffeelint:src', 'coffee', 'copy:target_self']
+    files: ['src/**/*.coffee']
+    tasks: ['coffeelint:src', 'browserify', 'coffee', 'copy:target_self']
+  browserify_omega_webext_proxy_script:
+    files: ['src/js/omega_webext_proxy_script.js']
+    tasks: ['browserify:omega_webext_proxy_script']
